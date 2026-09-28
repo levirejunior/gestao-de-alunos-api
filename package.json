@@ -20,7 +20,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^9.9.3",
     "morgan": "^1.10.0",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "chai": "^6.2.2",
