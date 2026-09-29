@@ -37,9 +37,9 @@ jobs:
           cache: npm
 
       - name: Instalar dependências
-        run: npm install
+        run: npm ci
 
       - name: Executar testes
-        run: npm run test-ci
+        run: npm test
         env:
-          MONGODB_URI: mongodb://127.0.0.1:27017/gestao-de-alunos
+          MONGODB_URI: mongodb://127.0.0.1:27017/gestao-de-alunos-test
