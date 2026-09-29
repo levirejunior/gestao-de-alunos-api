@@ -39,9 +39,6 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Iniciar API
-        run: npm start
-
       - name: Executar testes
         run: npm test
         env:
