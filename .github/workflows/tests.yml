@@ -1,14 +1,14 @@
 name: Testes de API
 
 on:
-  #schedule:
+  schedule:
     # cronograma de execução
     # 1 - minuto, 2 - hora, 3 dia do mês, 4 - mês, 5 - dia da semana
     
-    #Roda toda sexta-feira à meia noite
-    #- cron: '0 00 * * 3'
-    #  timezone: 'America/Sao_Paulo'
-  
+    #Roda toda quarta-feira à meia noite
+    - cron: '0 00 * * 3'
+      timezone: 'America/Sao_Paulo'
+
   workflow_dispatch:
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Iniciar Servidor
+      - name: Iniciar servidor
         run: npm start &  
 
       - name: Executar testes
