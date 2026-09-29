@@ -1,3 +1,4 @@
+
 /**
  * Autentica o administrador e retorna o token JWT.
  */

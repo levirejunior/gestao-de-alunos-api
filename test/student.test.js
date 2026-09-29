@@ -1,8 +1,10 @@
 import request from 'supertest';
 import { expect } from 'chai';
-import { loginAdmin, loginAluno } from './helpers/auth.helper';
-import testData from './data/testData.json';
+import { loginAdmin, loginAluno } from './helpers/auth.helper.js';
+import testData from './data/testData.json' with { type: 'json' };
+import dbCleaner from './helpers/collection.cleaner.js'
 import 'dotenv/config';
+
 
 const API_URL = process.env.API_URL || 'http://localhost:3000';
 const app = request(API_URL);
@@ -21,8 +23,14 @@ describe('Suíte de Testes: Fluxo de Gestão de Alunos e Entrega de Trabalhos', 
     });
   });
 
-  // 2. Data-Driven Testing: Cadastrar Alunos, Logar e Entregar Trabalhos
+  // 2. Data-Driven Testing: Cadastrar Alunos, Realizar matrículas, Logar e Entregar Trabalhos
   describe('Fluxo do Aluno (Data-Driven)', () => {
+
+    before(async () => {
+      await dbCleaner.limparColecao();
+    });
+
+    const assignment = testData.assignments[0];
 
     testData.studentsToCreate.forEach((student, index) => {
       describe(`Testando com Aluno ${index + 1}: ${student.nome}`, () => {
@@ -31,13 +39,25 @@ describe('Suíte de Testes: Fluxo de Gestão de Alunos e Entrega de Trabalhos', 
 
         it('Deve cadastrar o aluno via painel admin', async () => {
           const response = await app
-            .post('/api/admin/alunos')
+            .post('/api/admin/alunos') 
             .set('Authorization', `Bearer ${adminToken}`)
             .send(student);
 
-          expect([200, 201]).to.include(response.status);
+          expect(response.status).to.equal(201);
           expect(response.body).to.have.property('id');
           createdStudentId = response.body.id;
+        });
+
+        it('Deve realizar a matricula do aluno cadastrado em uma disciplina, via painel admin', async () => {
+          const response = await app
+            .post('/api/admin/disciplinas/'+`${assignment.disciplinaId}`+'/matriculas')
+            .set('Authorization', `Bearer ${adminToken}`)
+            .send({
+              alunoId: createdStudentId
+            });
+          
+          expect(response.status).to.equal(201);
+          expect(response.body).to.have.property('id');
         });
 
         it('Deve realizar login com as credenciais do aluno cadastrado', async () => {
@@ -52,17 +72,17 @@ describe('Suíte de Testes: Fluxo de Gestão de Alunos e Entrega de Trabalhos', 
         });
 
         it('Deve registrar a entrega de um trabalho como aluno', async () => {
-          const assignment = testData.assignments[0];
 
           const response = await app
-            .post('/api/trabalhos/entregas')
+            .post('/api/alunos/'+`${createdStudentId}`+'/trabalhos')
             .set('Authorization', `Bearer ${studentToken}`)
             .send({
+              disciplinaId: assignment.disciplinaId,
               titulo: assignment.titulo,
-              conteudo: assignment.conteudo
+              descricao: assignment.descricao
             });
-
-          expect([200, 201]).to.include(response.status);
+          
+          expect(response.status).to.equal(201);
           expect(response.body).to.have.property('id');
         });
       });

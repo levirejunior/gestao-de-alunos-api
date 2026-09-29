@@ -1,28 +1,27 @@
 {
   "adminCredentials": {
     "email": "admin@escola.com",
-    "senha": "admin"
+    "senha": "admin123"
   },
   "studentsToCreate": [
     {
       "nome": "Carlos Eduardo",
       "email": "carlos.eduardo@email.com",
-      "senha": "senhaSegura123",
       "matricula": "2026001",
-      "turma": "3A"
+      "senha": "senhaSegura123"
     },
     {
       "nome": "Mariana Silva",
       "email": "mariana.silva@email.com",
-      "senha": "senhaSegura456",
       "matricula": "2026002",
-      "turma": "3B"
+      "senha": "senhaSegura456"
     }
   ],
   "assignments": [
     {
+      "disciplinaId": "disciplina-historia",
       "titulo": "Trabalho de História - Revolução Industrial",
-      "conteudo": "Apresentação"
+      "descricao": "Apresentação"
     }
   ]
 }
